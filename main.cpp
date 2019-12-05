@@ -4,54 +4,42 @@
 
 using namespace std;
 
-void set(float **array, int n);
 
-void show(float **array, int n);
+void show(float **array, int n);//Показ матриці
 
-void kill(float **array, int n);
+int getN(); //введеня розміру матриці користувачем
 
-float **matrix(int n);
+void kill(float **array, int n);//Очищення пам'яті
 
-float mnorm(float **array, int n);
+float **matrix(int n);//Створення і задання матриці
 
-float fabsolute(float number);
+float mnorm(float **array, int n);//Знаходження М-норма
 
-float maximum(const float *array, int n);
+float fabsolute(float number);//Знаходження модуля числа
+
+float maximum(const float *array, int n);//Знаходження максимального значення
 
 int main() {
-    cout << "Введіть розмір масиву: ";
-    int n;
-    cin >> n;
-    float **mA = matrix(n);
-    float **mB = matrix(n);
-    set(mA, n);
-    set(mB, n);
+    int n = getN();//Розмір матриці введений користувачем
+    float **mA = matrix(n);//Вказівник на першу матрицю
+    float **mB = matrix(n);//Вказівник на другу матрицю
     show(mA, n);
     show(mB, n);
 
     cout << "Знаходження М-норма першого масиву" << endl;
-    float mNormA= mnorm(mA, n);
+    float mNormA = mnorm(mA, n);//М-норм першої матриці
     cout << mNormA << endl;
     cout << "Знаходження М-норма другого масиву" << endl;
-    float mNormB= mnorm(mB, n);
+    float mNormB = mnorm(mB, n);//М-
     cout << mNormB << endl;
 
-    cout << "Середнє арифметичне: " << (mNormA+mNormB)/2;
+    cout << "Середнє арифметичне: " << (mNormA + mNormB) / 2;
 
     kill(mA, n);
     kill(mB, n);
     return 0;
 }
 
-void set(float **array, int n) {
-    random_device rd;
-    mt19937 mersenne(rd());
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            *(*(array + i) + j) = (float) ((float) (mersenne() % 100) * 0.99);
-        }
-    }
-}
 
 void show(float **array, int n) {
     for (int i = 0; i < n; ++i) {
@@ -74,6 +62,16 @@ float **matrix(int n) {
     matrix = new float *[n];
     for (int i = 0; i < n; i++)
         matrix[i] = new float[n];
+
+    random_device rd;
+    mt19937 mersenne(rd());
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            *(*(matrix + i) + j) = (float) ((float) (mersenne() % 16) - 5);
+        }
+    }
+
+
     return matrix;
 }
 
@@ -99,9 +97,16 @@ float fabsolute(float number) {
 float maximum(const float *array, int n) {
     float maximum = *array;
     for (int i = 0; i < n; ++i) {
-        if (*(array+i) > maximum)
-            maximum = *(array+i);
+        if (*(array + i) > maximum)
+            maximum = *(array + i);
     }
     return maximum;
+}
+
+int getN() {
+    cout << "Введіть розмір масиву: ";
+    int n;
+    cin >> n;
+    return n;
 }
 
